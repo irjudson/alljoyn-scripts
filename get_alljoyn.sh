@@ -6,6 +6,9 @@ else
 	export VER=v14.06
 fi
 
+mkdir allseen_14.06
+cd allseen_14.06/
+
 export AJ_ROOT=`pwd`/alljoyn
 
 git clone https://git.allseenalliance.org/gerrit/core/alljoyn.git $AJ_ROOT/core/alljoyn
@@ -19,3 +22,16 @@ pushd $AJ_ROOT/core/alljoyn; git checkout -b $VER $VER; popd
 pushd $AJ_ROOT/core/ajtcl; git checkout -b $VER $VER; popd
 pushd $AJ_ROOT/services/base; git checkout -b $VER $VER; popd
 pushd $AJ_ROOT/services/base_tcl; git checkout -b $VER $VER; popd
+
+git clone https://git.allseenalliance.org/gerrit/core/alljoyn-js.git $AJ_ROOT/core/alljoyn-js
+
+curl http://duktape.org/duktape-0.11.0.tar.xz > duktape-0.11.0.tar.xz
+tar -xvf duktape-0.11.0.tar.xz 
+
+export DUKTAPE_DIST=`pwd`/duktape-0.11.0
+
+# Patch before building
+pushd alljoyn/core/alljoyn-js/
+curl https://gist.githubusercontent.com/irjudson/4912b58c2a00c0a07dd7/raw/3efe913d00b3ba90b63f354dea68be98cf8de4c0/gistfile1.txt > /tmp/alljoyn-js.patch
+patch < /tmp/alljoyn-js.patch
+popd
