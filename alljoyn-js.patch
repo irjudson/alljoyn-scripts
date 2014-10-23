@@ -1,0 +1,102 @@
+From 4255d0e690da8278d9faccfa6f6301108ec74bc6 Mon Sep 17 00:00:00 2001
+From: "Ivan R. Judson" <irjudson@gmail.com>
+Date: Thu, 23 Oct 2014 08:42:57 -0700
+Subject: [PATCH 1/2] MSVC12
+
+---
+ SConstruct | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/SConstruct b/SConstruct
+index b0bf546..e1298e3 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -46,7 +46,7 @@ vars.Add(PathVariable('STM_SRC_DIR', 'Path to the source code for the STM32 micr
+ vars.Add(PathVariable('FREE_RTOS_DIR','Directory to FreeRTOS source code', os.environ.get('FREE_RTOS_DIR'), PathVariable.PathIsDir))
+ 
+ if default_msvc_version:
+-    vars.Add(EnumVariable('MSVC_VERSION', 'MSVC compiler version - Windows', default_msvc_version, allowed_values=('8.0', '9.0', '10.0', '11.0', '11.0Exp')))
++    vars.Add(EnumVariable('MSVC_VERSION', 'MSVC compiler version - Windows', default_msvc_version, allowed_values=('8.0', '9.0', '10.0', '11.0', '11.0Exp', '12.0', '12.0Exp')))
+ 
+ if ARGUMENTS.get('TARG', default_target) == 'win32':
+     msvc_version = ARGUMENTS.get('MSVC_VERSION')
+-- 
+1.9.3 (Apple Git-50)
+
+
+From eb6f8b226f3c37ac04281a9e8590512095f1188d Mon Sep 17 00:00:00 2001
+From: "Ivan R. Judson" <irjudson@gmail.com>
+Date: Thu, 23 Oct 2014 08:47:50 -0700
+Subject: [PATCH 2/2] Fixed signatures
+
+---
+ ajs_propstore.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/ajs_propstore.c b/ajs_propstore.c
+index 8c77e6e..b7b4de8 100644
+--- a/ajs_propstore.c
++++ b/ajs_propstore.c
+@@ -101,19 +101,19 @@ static const PropertyStoreEntry propDefs[AJSVC_PROPERTY_STORE_NUMBER_OF_KEYS] =
+ 
+ static const char* SupportedLanguagesKey = "SupportedLanguages";
+ 
+-uint8_t AJSVC_PropertyStore_GetMaxValueLength(int8_t field)
++uint8_t AJSVC_PropertyStore_GetMaxValueLength(AJSVC_PropertyStoreFieldIndices field)
+ {
+     return MAX_PROP_LENGTH;
+ }
+ 
+-const char* AJSVC_PropertyStore_GetFieldName(int8_t field)
++const char* AJSVC_PropertyStore_GetFieldName(AJSVC_PropertyStoreFieldIndices field)
+ {
+     return IS_VALID_FIELD_ID(field) ? propDefs[field].keyName : "N/A";
+ }
+ 
+-int8_t AJSVC_PropertyStore_GetFieldIndex(const char* fieldName)
++AJSVC_PropertyStoreFieldIndices AJSVC_PropertyStore_GetFieldIndex(const char* fieldName)
+ {
+-    int8_t field;
++    AJSVC_PropertyStoreFieldIndices field;
+ 
+     for (field = FIRST_PROPERTY_INDEX; field < AJSVC_PROPERTY_STORE_NUMBER_OF_KEYS; field++) {
+         if (strcmp(propDefs[field].keyName, fieldName) == 0) {
+@@ -162,7 +162,7 @@ const char* AJSVC_PropertyStore_GetLanguageName(int8_t index)
+     return language ? language : DEFAULT_LANGUAGE;
+ }
+ 
+-const char* AJSVC_PropertyStore_GetValueForLang(int8_t field, int8_t index)
++const char* AJSVC_PropertyStore_GetValueForLang(AJSVC_PropertyStoreFieldIndices field, int8_t index)
+ {
+     const char* val = NULL;
+     const char* lang;
+@@ -214,7 +214,7 @@ const char* AJSVC_PropertyStore_GetValueForLang(int8_t field, int8_t index)
+     return val;
+ }
+ 
+-const char* AJSVC_PropertyStore_GetValue(int8_t field)
++const char* AJSVC_PropertyStore_GetValue(AJSVC_PropertyStoreFieldIndices field)
+ {
+     return AJSVC_PropertyStore_GetValueForLang(field, AJS_GetCurrentLanguage());
+ }
+@@ -224,7 +224,7 @@ int8_t AJSVC_PropertyStore_GetLanguageIndex(const char* const language)
+     return (int8_t)AJS_GetLanguageIndex(duktape, language);
+ }
+ 
+-uint8_t AJSVC_PropertyStore_SetValue(int8_t field, const char* value)
++uint8_t AJSVC_PropertyStore_SetValue(AJSVC_PropertyStoreFieldIndices field, const char* value)
+ {
+     return AJSVC_PropertyStore_SetValueForLang(field, AJS_GetCurrentLanguage(), value);
+ }
+@@ -443,7 +443,7 @@ AJ_Status AJSVC_PropertyStore_Update(const char* key, int8_t lang, const char* v
+     return AJSVC_PropertyStore_SetValueForLang(field, lang, value) ? AJ_OK : AJ_ERR_INVALID;
+ }
+ 
+-uint8_t AJSVC_PropertyStore_SetValueForLang(int8_t field, int8_t lang, const char* value)
++uint8_t AJSVC_PropertyStore_SetValueForLang(AJSVC_PropertyStoreFieldIndices field, int8_t lang, const char* value)
+ {
+     duk_context* ctx = duktape;
+     const char* str = value;
+-- 
+1.9.3 (Apple Git-50)
+

@@ -32,6 +32,9 @@ export DUKTAPE_DIST=`pwd`/duktape-0.11.0
 
 # Patch before building
 pushd alljoyn/core/alljoyn-js/
-curl https://gist.githubusercontent.com/irjudson/4912b58c2a00c0a07dd7/raw/3efe913d00b3ba90b63f354dea68be98cf8de4c0/gistfile1.txt > /tmp/alljoyn-js.patch
-patch < /tmp/alljoyn-js.patch
+patch < ../../../../alljoyn-js.patch
+popd
+
+pushd alljoyn/core/alljoyn
+patch < ../../../../alljoyn-core.patch
 popd
