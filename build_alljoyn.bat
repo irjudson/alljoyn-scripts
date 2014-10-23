@@ -2,9 +2,6 @@
 set VER=v14.06
 set CONFIGURATION=release
 
-set PLATFORM="%1"
-set ARCH="%2"
-
 if %1.==. GOTO No1
 if %2.==. GOTO No2
 
@@ -14,9 +11,9 @@ set DUKTAPE_DIST=`pwd`/duktape-0.11.0
 
 # Build stuff
 cd alljoyn/core/alljoyn
-scons OS=$PLATFORM CPU=$ARCH BD=on WS=off VARIANT=release BINDINGS=cpp SERVICES="about,config,controlpanel,notification" SDKROOT=`pwd`
+scons OS=%1 CPU=%2 BD=on WS=off VARIANT=release BINDINGS=cpp SERVICES="about,config,controlpanel,notification" SDKROOT=`pwd`
 
-set ALLJOYN_DISTDIR=`pwd`/build/$PLATFORM/$ARCH/release/dist/
+set ALLJOYN_DISTDIR=`pwd`/build/%1/%2/release/dist/
 
 cd ../ajtcl/
 scons WS=off VARIANT=release
