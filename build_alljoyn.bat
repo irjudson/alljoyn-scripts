@@ -6,14 +6,15 @@ if %1.==. GOTO No1
 if %2.==. GOTO No2
 
 cd allseen_14.06/
-set AJ_ROOT=`pwd`/alljoyn
-set DUKTAPE_DIST=`pwd`/duktape-0.11.0
+set CURDIR=cd
+set AJ_ROOT=%CURDIR%/alljoyn
+set DUKTAPE_DIST=%CURDIR%/duktape-0.11.0
 
 # Build stuff
 cd alljoyn/core/alljoyn
-scons MSVC_VERSION=12.0 OS=%1 CPU=%2 BD=on WS=off VARIANT=release BINDINGS=cpp SERVICES="about,config,controlpanel,notification" SDKROOT=`pwd`
-
-set ALLJOYN_DISTDIR=`pwd`/build/%1/%2/release/dist/
+scons MSVC_VERSION=12.0 OS=%1 CPU=%2 BD=on WS=off VARIANT=release BINDINGS=cpp SERVICES="about,config,controlpanel,notification" SDKROOT=`cd`
+set CURDIR=cd
+set ALLJOYN_DISTDIR=%CURDIR%/build/%1/%2/release/dist/
 
 cd ../ajtcl/
 scons MSVC_VERSION=12.0 WS=off VARIANT=release
