@@ -49,3 +49,8 @@ popd
 pushd alljoyn/core/alljoyn/
 patch -p1 < ../../../../alljoyn-core.patch
 popd
+
+pushd alljoyn/core/ajtcl
+patch -p1 < ../../../../alljoyn-tcl.patch
+popd
+
