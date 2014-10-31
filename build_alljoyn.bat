@@ -14,7 +14,7 @@ set DUKTAPE_DIST=%CURDIR%/duktape-0.11.0
 
 REM Build stuff
 cd alljoyn/core/alljoyn
-scons MSVC_VERSION=%MSVC_VERSION% OS=%1 CPU=%2 BD=on WS=off VARIANT=release BINDINGS=c++ SERVICES="about,config,controlpanel,notification" SDKROOT=`cd`
+scons MSVC_VERSION=%MSVC_VERSION% OS=%1 CPU=%2 BR=on WS=off VARIANT=release BINDINGS=c++ SERVICES="about,config,controlpanel,notification" SDKROOT=`cd`
 set CURDIR=cd
 set ALLJOYN_DISTDIR=%CURDIR%/build/%1/%2/release/dist/
 
