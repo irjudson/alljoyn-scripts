@@ -6,8 +6,15 @@ else
 	export VER=v14.06
 fi
 
-mkdir allseen_14.06
-cd allseen_14.06/
+if [ "$VER" == "v14.06" ]; then
+	mkdir allseen_14.06
+	cd allseen_14.06/
+else
+	mkdir allseen
+	cd allseen
+fi
+
+DUKTAPE_VERSION=1.0.2
 
 export AJ_ROOT=`pwd`/alljoyn
 
@@ -18,14 +25,16 @@ git clone https://git.allseenalliance.org/gerrit/services/base_tcl.git $AJ_ROOT/
 git clone https://git.allseenalliance.org/gerrit/data/datadriven_api.git $AJ_ROOT/data/datadriven_api
 git clone https://git.allseenalliance.org/gerrit/devtools/codegen.git $AJ_ROOT/devtools/codegen
 
-pushd $AJ_ROOT/core/alljoyn; git checkout -b $VER $VER; popd
-pushd $AJ_ROOT/core/ajtcl; git checkout -b $VER $VER; popd
-pushd $AJ_ROOT/services/base; git checkout -b $VER $VER; popd
-pushd $AJ_ROOT/services/base_tcl; git checkout -b $VER $VER; popd
+if [ "$VER" != "latest" ]; then
+	pushd $AJ_ROOT/core/alljoyn; git checkout -b $VER $VER; popd
+	pushd $AJ_ROOT/core/ajtcl; git checkout -b $VER $VER; popd
+	pushd $AJ_ROOT/services/base; git checkout -b $VER $VER; popd
+	pushd $AJ_ROOT/services/base_tcl; git checkout -b $VER $VER; popd
+fi
 
 git clone https://git.allseenalliance.org/gerrit/core/alljoyn-js.git $AJ_ROOT/core/alljoyn-js
 
-curl http://duktape.org/duktape-0.11.0.tar.xz > duktape-0.11.0.tar.xz
+curl http://duktape.org/duktape-$DUKTAPE_VERSION.tar.xz > duktape-$DUKTAPE_VERSION.tar.xz
 
 if [ "$TERM" = "cygwin" ]; then
 	# We are in gitshell on windows so we have to get the xz libs
@@ -37,20 +46,21 @@ if [ "$TERM" = "cygwin" ]; then
 	cd ..
 fi
 
-tar -xvf duktape-0.11.0.tar.xz 
+tar -xvf duktape-$DUKTAPE_VERSION.tar.xz 
 
-export DUKTAPE_DIST=`pwd`/duktape-0.11.0
+export DUKTAPE_DIST=`pwd`/duktape-$DUKTAPE_VERSION
 
-# Patch before building
-pushd alljoyn/core/alljoyn-js/
-patch -p1 < ../../../../alljoyn-js.patch
-popd
+if [ "$VER" != "latest" ]; then
+	# Patch before building
+	pushd alljoyn/core/alljoyn-js/
+	patch -p1 < ../../../../alljoyn-js.patch
+	popd
 
-pushd alljoyn/core/alljoyn/
-patch -p1 < ../../../../alljoyn-core.patch
-popd
+	pushd alljoyn/core/alljoyn/
+	patch -p1 < ../../../../alljoyn-core.patch
+	popd
 
-pushd alljoyn/core/ajtcl
-patch -p1 < ../../../../alljoyn-tcl.patch
-popd
-
+	pushd alljoyn/core/ajtcl
+	patch -p1 < ../../../../alljoyn-tcl.patch
+	popd
+fi

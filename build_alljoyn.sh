@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-export VER=v14.06
+#export VER=v14.06
 export CONFIGURATION=release
 
 export PLATFORM="$1"
@@ -11,8 +11,12 @@ if [ "$PLATFORM" = "" ]; then
 fi
 
 if [ "$ARCH" = "" ]; then
-	echo "You must supply an architecture: x86 or x86_64"
+	echo "You must supply an architecture: x86 (All) or x86_64 (Only linux & Windows)"
 	exit 1
+fi
+
+if [ "$PLATFORM" = "darwin" ]; then
+	export ARCH="x86"
 fi
 
 if [ "$PLATFORM" = "linux" ]; then
@@ -26,9 +30,11 @@ export DUKTAPE_DIST=`pwd`/duktape-0.11.0
 
 # Build stuff
 cd alljoyn/core/alljoyn
-scons OS=$PLATFORM CPU=$ARCH BD=on WS=off VARIANT=release BINDINGS=cpp SERVICES="about,config,controlpanel,notification" SDKROOT=`pwd`
 
-export ALLJOYN_DISTDIR=`pwd`/build/$PLATFORM/$ARCH/release/dist/
+if [ "$PLATFORM" != "windows" ]; then
+	scons OS=$PLATFORM CPU=$ARCH BD=on WS=off VARIANT=release BINDINGS=cpp SERVICES="about,config,controlpanel,notification" SDKROOT=`pwd`
+	export ALLJOYN_DISTDIR=`pwd`/build/$PLATFORM/$ARCH/release/dist/
+fi
 
 cd ../ajtcl/
 scons WS=off VARIANT=release
