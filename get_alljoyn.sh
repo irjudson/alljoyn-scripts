@@ -53,15 +53,15 @@ export DUKTAPE_DIST=`pwd`/duktape-$DUKTAPE_VERSION
 
 if [ "$OS" = "Windows_NT" ]; then
 	# Patch before building
-	pushd core/alljoyn-js/
-	patch -p1 < ../../../14.06/alljoyn-js.patch
-	popd
-
 	pushd core/alljoyn/
 	patch -p1 < ../../../14.06/alljoyn-core.patch
 	popd
 
 	pushd core/ajtcl
 	patch -p1 < ../../../14.06/alljoyn-tcl.patch
+	popd
+
+	pushd core/alljoyn-js/
+	patch -p1 < ../../../14.06/alljoyn-js.patch
 	popd
 fi
