@@ -20,6 +20,7 @@ export AJ_ROOT=`pwd`/alljoyn
 
 git clone https://git.allseenalliance.org/gerrit/core/alljoyn.git $AJ_ROOT/core/alljoyn
 git clone https://git.allseenalliance.org/gerrit/core/ajtcl.git $AJ_ROOT/core/ajtcl
+git clone https://git.allseenalliance.org/gerrit/core/alljoyn-js.git $AJ_ROOT/core/alljoyn-js
 git clone https://git.allseenalliance.org/gerrit/services/base.git $AJ_ROOT/services/base
 git clone https://git.allseenalliance.org/gerrit/services/base_tcl.git $AJ_ROOT/services/base_tcl
 git clone https://git.allseenalliance.org/gerrit/data/datadriven_api.git $AJ_ROOT/data/datadriven_api
@@ -31,8 +32,6 @@ if [ "$VER" != "latest" ]; then
 	pushd $AJ_ROOT/services/base; git checkout -b $VER $VER; popd
 	pushd $AJ_ROOT/services/base_tcl; git checkout -b $VER $VER; popd
 fi
-
-git clone https://git.allseenalliance.org/gerrit/core/alljoyn-js.git $AJ_ROOT/core/alljoyn-js
 
 curl http://duktape.org/duktape-$DUKTAPE_VERSION.tar.xz > duktape-$DUKTAPE_VERSION.tar.xz
 
@@ -50,17 +49,17 @@ tar -xvf duktape-$DUKTAPE_VERSION.tar.xz
 
 export DUKTAPE_DIST=`pwd`/duktape-$DUKTAPE_VERSION
 
-if [ "$VER" != "latest" ]; then
+if [ "$VER" == "v14.06" ]; then
 	# Patch before building
 	pushd alljoyn/core/alljoyn-js/
-	patch -p1 < ../../../../alljoyn-js.patch
+	patch -p1 < ../../../../14.06/alljoyn-js.patch
 	popd
 
 	pushd alljoyn/core/alljoyn/
-	patch -p1 < ../../../../alljoyn-core.patch
+	patch -p1 < ../../../../14.06/alljoyn-core.patch
 	popd
 
 	pushd alljoyn/core/ajtcl
-	patch -p1 < ../../../../alljoyn-tcl.patch
+	patch -p1 < ../../../../14.06/alljoyn-tcl.patch
 	popd
 fi
