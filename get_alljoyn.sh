@@ -51,7 +51,7 @@ tar -xvf duktape-$DUKTAPE_VERSION.tar.xz
 
 export DUKTAPE_DIST=`pwd`/duktape-$DUKTAPE_VERSION
 
-if [ "$VER" == "v14.06" ]; then
+if [ "$OS" = "Windows_NT" ]; then
 	# Patch before building
 	pushd alljoyn/core/alljoyn-js/
 	patch -p1 < ../../../../14.06/alljoyn-js.patch
