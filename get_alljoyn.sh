@@ -7,16 +7,17 @@ else
 fi
 
 if [ "$VER" == "v14.06" ]; then
-	mkdir allseen_14.06
-	cd allseen_14.06/
+	mkdir alljoyn-14.06
+	ln -s alljoyn-14.06 alljoyn
 else
-	mkdir allseen
-	cd allseen
+	mkdir alljoyn-latest
+	ln -s alljoyn-latest alljoyn
 fi
+cd alljoyn
 
 DUKTAPE_VERSION=1.0.2
 
-export AJ_ROOT=`pwd`/alljoyn
+export AJ_ROOT=`pwd`
 
 git clone https://git.allseenalliance.org/gerrit/core/alljoyn.git $AJ_ROOT/core/alljoyn
 git clone https://git.allseenalliance.org/gerrit/core/ajtcl.git $AJ_ROOT/core/ajtcl
@@ -25,6 +26,7 @@ git clone https://git.allseenalliance.org/gerrit/services/base.git $AJ_ROOT/serv
 git clone https://git.allseenalliance.org/gerrit/services/base_tcl.git $AJ_ROOT/services/base_tcl
 git clone https://git.allseenalliance.org/gerrit/data/datadriven_api.git $AJ_ROOT/data/datadriven_api
 git clone https://git.allseenalliance.org/gerrit/devtools/codegen.git $AJ_ROOT/devtools/codegen
+git clone https://git.allseenalliance.org/gerrit/gateway/gwagent.git $AJ_ROOT/gateway/gwagent
 
 if [ "$VER" != "latest" ]; then
 	pushd $AJ_ROOT/core/alljoyn; git checkout -b $VER $VER; popd

@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-#export VER=v14.06
-export CONFIGURATION=release
 
 export PLATFORM="$1"
 export ARCH="$2"
+export CONFIGURATION="$3"
 
 if [ "$PLATFORM" = "" ]; then
 	echo "You must supply a platform: darwin, linux, or windows"
@@ -15,21 +14,25 @@ if [ "$ARCH" = "" ]; then
 	exit 1
 fi
 
-if [ "$PLATFORM" = "darwin" ]; then
-	export ARCH="x86"
+if [ "$CONFIGURATION" = "" ]; then
+	CONFIGURATION="debug"
 fi
+
+# if [ "$PLATFORM" = "darwin" ]; then
+# 	export ARCH="x86"
+# fi
 
 if [ "$PLATFORM" = "linux" ]; then
 	echo "Please make sure you have the following packages installed (for ubuntu 12+):"
 	echo "sudo apt-get install git build-essential curl scons libssl-dev libc6-dev-i386 g++-multilib"
 fi
 
-cd allseen_14.06/
-export AJ_ROOT=`pwd`/alljoyn
+cd alljoyn
+export AJ_ROOT=`pwd`
 export DUKTAPE_DIST=`pwd`/duktape-0.11.0
 
 # Build stuff
-cd alljoyn/core/alljoyn
+cd core/alljoyn
 
 if [ "$PLATFORM" != "windows" ]; then
 	scons OS=$PLATFORM CPU=$ARCH BD=on WS=off VARIANT=release BINDINGS=cpp SERVICES="about,config,controlpanel,notification" SDKROOT=`pwd`
