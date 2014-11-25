@@ -1,30 +1,31 @@
-@echo off
-@rem off
-set MSVC_VERSION=11.0
+@echo on
+
+set MSVC_VERSION=12.0
 set CONFIGURATION=release
 
 if %1.==. GOTO No1
 if %2.==. GOTO No2
 
 cd alljoyn
-set CURDIR=cd
+set CURDIR=%CD%
 set AJ_ROOT=%CURDIR%
-set DUKTAPE_DIST=%CURDIR%/duktape-1.0.2
+set DUKTAPE_DIST=%CURDIR%\duktape-1.0.2
 
 REM Build stuff
-cd core/alljoyn
-scons MSVC_VERSION=%MSVC_VERSION% OS=%1 CPU=%2 BR=on WS=off VARIANT=release BINDINGS=c++ SERVICES="about,config,controlpanel,notification" SDKROOT=`cd`
-set CURDIR=cd
-set ALLJOYN_DISTDIR=%CURDIR%/build/%1/%2/release/dist/
+cd core\alljoyn
+set SDKROOT=%CD%
+call scons MSVC_VERSION=%MSVC_VERSION% OS=%1 CPU=%2 BR=on WS=off VARIANT=release BINDINGS=c++ SERVICES="about,config,controlpanel,notification" SDKROOT=%SDKROOT%
+set CURDIR=%CD%
+set ALLJOYN_DISTDIR=%CURDIR%\build\%1\%2\release\dist
 
-cd ../ajtcl/
-scons MSVC_VERSION=%MSVC_VERSION% WS=off VARIANT=release
+cd ..\ajtcl
+call scons MSVC_VERSION=%MSVC_VERSION% OS=%1 CPU=%2 WS=off VARIANT=release
 
-cd ../alljoyn-js/
-scons MSVC_VERSION=%MSVC_VERSION% WS=off VARIANT=release
+cd ..\alljoyn-js
+call scons MSVC_VERSION=%MSVC_VERSION% OS=%1 CPU=%2 WS=off VARIANT=release
 
-cd console/
-scons MSVC_VERSION=%MSVC_VERSION% WS=off VARIANT=release
+cd console
+call scons MSVC_VERSION=%MSVC_VERSION% OS=%1 CPU=%2 WS=off VARIANT=release
 
 GOTO End
 
