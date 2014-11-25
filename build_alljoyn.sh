@@ -29,7 +29,7 @@ fi
 
 cd alljoyn
 export AJ_ROOT=`pwd`
-export DUKTAPE_DIST=`pwd`/duktape-0.11.0
+export DUKTAPE_DIST=`pwd`/duktape-1.0.2
 
 # Build stuff
 cd core/alljoyn
